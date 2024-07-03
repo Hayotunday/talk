@@ -21,9 +21,14 @@ export const sidebarLinks = [
     label: 'Recordings',
   },
   {
-    imgUrl: '/icons/add-personal.svg',
-    route: '/personal-room',
+    imgUrl: '/icons/personal.svg',
+    route: '/personal',
     label: 'Personal Room',
+  },
+  {
+    imgUrl: '/icons/logout.svg',
+    action: true,
+    label: 'Logout',
   },
 ];
 

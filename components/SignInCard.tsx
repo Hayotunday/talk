@@ -1,19 +1,72 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import { useToast } from "./ui/use-toast";
 import { FcGoogle } from "react-icons/fc";
 import { FaCaretRight, FaEye, FaEyeSlash } from "react-icons/fa";
-import Link from "next/link";
+import { useUserStore, userInterface } from "@/state/users";
+import { loginWithEmailAndPassword } from "@/actions/firebase.action";
+import Image from "next/image";
+import { decrypt } from "@/constants/functions";
 
 const SignInCard = () => {
   const [showPass, setShowPass] = useState(false);
+  const [signingIn, setSigningIn] = useState(false);
   const [showPassInput, setShowPassInput] = useState(false);
   const [details, setDetails] = useState({
-    user: "",
+    email: "",
     pass: "",
   });
+  const router = useRouter();
+  const params = useSearchParams();
+  const redirectParam = params.get("redirect");
+  const { toast } = useToast();
+  const { update, login } = useUserStore();
+
+  const key = process.env.NEXT_PUBLIC_SECRET_KEY;
+
+  const handleSignIn = async () => {
+    setSigningIn(true);
+    const regResponse = await loginWithEmailAndPassword(
+      details.email,
+      details.pass
+    );
+    const { error, success, userInfo } = regResponse;
+    if (success == true) {
+      login();
+      update(userInfo as userInterface);
+      toast({
+        title: "Sign-in successful",
+      });
+      if (redirectParam) {
+        const url = decrypt(redirectParam!, key!);
+        return router.push(`${url}`);
+      }
+      router.push("/");
+    } else if (error === "Email in use") {
+      toast({
+        variant: "destructive",
+        title: "Error while signing in",
+        description: "Email already exists",
+      });
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Error while signing in",
+        description: "Please check sign-in credentials",
+      });
+    }
+    setSigningIn(false);
+  };
+
+  const signUpUrl = (): string => {
+    if (redirectParam) return `/signup?redirect=${redirectParam}`;
+    return "/signup";
+  };
 
   return (
     <div className="rounded-xl shadow-black shadow text-white bg-dark-1 w-full md:w-[375px] mx-10">
@@ -34,20 +87,20 @@ const SignInCard = () => {
           <hr className="w-full border-dark-3" />
         </div>
 
-        <form className="flex flex-col w-full mt-6">
+        <form className="flex flex-col w-full mt-6 gap-4">
           <div className="w-full">
-            <p className="">Email address or username</p>
+            <p className="">Email address</p>
             <Input
               className="border-none h-8 mt-1.5 bg-dark-3 focus-visible:ring-0 focus-visible:ring-offset-0 w-full text-xs"
               onChange={(e) => {
-                setDetails({ ...details, user: e.target.value });
+                setDetails({ ...details, email: e.target.value });
               }}
-              value={details.user}
+              value={details.email}
             />
           </div>
 
           {showPassInput && (
-            <div className="w-full mt-4">
+            <div className="w-full">
               <p className="">Password</p>
               <div className="relative">
                 <Input
@@ -56,7 +109,7 @@ const SignInCard = () => {
                     setDetails({ ...details, pass: e.target.value });
                   }}
                   value={details.pass}
-                  type={showPass ? "text" : "password"}
+                  type={showPass ? "email" : "password"}
                 />
                 {showPass ? (
                   <FaEyeSlash
@@ -82,7 +135,7 @@ const SignInCard = () => {
               className="w-full h-8 mt-6 text-white bg-blue-1 text-xs"
               onClick={(e) => {
                 e.preventDefault();
-                if (details.user.length > 0) setShowPassInput(true);
+                if (details.email.length > 0) setShowPassInput(true);
               }}
             >
               Continue
@@ -92,9 +145,21 @@ const SignInCard = () => {
           {showPassInput && (
             <Button
               className="w-full h-8 mt-6 text-white bg-blue-1 text-xs"
-              onClick={() => {}}
+              onClick={(e) => {
+                e.preventDefault();
+                handleSignIn();
+              }}
             >
-              Sign in
+              {signingIn ? "Signing in" : "Sign in"}
+              {signingIn && (
+                <Image
+                  src={"/icons/loading-circle.svg"}
+                  alt="Loading"
+                  width={18}
+                  height={18}
+                  className="mx-2"
+                />
+              )}
             </Button>
           )}
         </form>
@@ -103,7 +168,7 @@ const SignInCard = () => {
       <div className="w-full p-4">
         <p className="text-center text-slate-400">
           Don't have an account?{" "}
-          <Link href={"/signup"} className="text-blue-1">
+          <Link href={signUpUrl()} className="text-blue-1">
             Sign up
           </Link>
         </p>
