@@ -15,9 +15,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
     // <AuthProvider>
     <main>
-      {/* <StreamVideoProvider> */}
-      {children}
-      {/* </StreamVideoProvider> */}
+      <StreamVideoProvider>{children}</StreamVideoProvider>
     </main>
     // </AuthProvider>
   );
