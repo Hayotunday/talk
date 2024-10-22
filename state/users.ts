@@ -20,11 +20,17 @@ type Actions = {
 
 export const useUserStore = create<State & Actions>((set) => ({
   user: {
-    userid: null,
-    email: null,
-    username: null,
-    image: null
+    userid: "ucwebuwucbu12878y472yuby2c3h2c3",
+    email: "idowudanielayotunde@gmail.com",
+    username: "Hayotunday",
+    image: "/images/avatar-1.jpeg"
   },
+  // user: {
+  //   userid: null,
+  //   email: null,
+  //   username: null,
+  //   image: null
+  // },
   isLoggedIn: false,
   update: (data: userInterface) => set((state) => ({ user: { ...state.user, ...data } })),
   login: () => set(() => ({ isLoggedIn: true })),

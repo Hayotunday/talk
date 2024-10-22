@@ -9,7 +9,7 @@ const ProfilePicture = () => {
     user: { image, username },
   } = useUserStore();
   return (
-    <Avatar className="bg-slate-300">
+    <Avatar className={"bg-slate-300"}>
       <AvatarImage src={image!} />
       <AvatarFallback>{username?.charAt(0)}</AvatarFallback>
     </Avatar>

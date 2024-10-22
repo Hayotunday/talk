@@ -3,7 +3,7 @@
 import { ReactNode, useEffect } from "react";
 import { useUserStore } from "@/state/users";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { encrypt } from "@/constants/functions";
+import { encrypt } from "@/lib/utils";
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const { isLoggedIn } = useUserStore();

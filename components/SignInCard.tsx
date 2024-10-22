@@ -11,7 +11,7 @@ import { FaCaretRight, FaEye, FaEyeSlash } from "react-icons/fa";
 import { useUserStore, userInterface } from "@/state/users";
 import { loginWithEmailAndPassword } from "@/actions/firebase.action";
 import Image from "next/image";
-import { decrypt } from "@/constants/functions";
+import { decrypt } from "@/lib/utils";
 
 const SignInCard = () => {
   const [showPass, setShowPass] = useState(false);

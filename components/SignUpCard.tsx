@@ -10,8 +10,8 @@ import { FcGoogle } from "react-icons/fc";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { registerWithEmailAndPassword } from "@/actions/firebase.action";
 import { useUserStore, userInterface } from "@/state/users";
-import { decrypt } from "@/constants/functions";
 import Image from "next/image";
+import { decrypt } from "@/lib/utils";
 
 const SignUpCard = () => {
   const [showPass, setShowPass] = useState(false);

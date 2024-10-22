@@ -13,11 +13,13 @@ export const metadata: Metadata = {
 
 const RootLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <AuthProvider>
-      <main>
-        <StreamVideoProvider>{children}</StreamVideoProvider>
-      </main>
-    </AuthProvider>
+    // <AuthProvider>
+    <main>
+      {/* <StreamVideoProvider> */}
+      {children}
+      {/* </StreamVideoProvider> */}
+    </main>
+    // </AuthProvider>
   );
 };
 

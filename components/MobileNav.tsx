@@ -65,7 +65,7 @@ const MobileNav = () => {
                           onClick={handleSignout}
                           key={link.label}
                           className={cn(
-                            "flex gap-4 items-center p-4 rounded-lg w-full max-w-60",
+                            "flex gap-4 items-center p-3 my-2 rounded-lg w-full max-w-60 justify-start",
                             {
                               "bg-blue-1": isActive,
                             }
@@ -77,16 +77,14 @@ const MobileNav = () => {
                             width={24}
                             height={24}
                           />
-                          <p className="text-lg font-semibold max-lg:hidden">
-                            {link.label}
-                          </p>
+                          <p className="font-semibold">{link.label}</p>
                         </Button>
                       ) : (
                         <Link
                           href={link.route!}
                           key={link.label}
                           className={cn(
-                            "flex gap-4 items-center p-4 rounded-lg w-full max-w-60",
+                            "flex gap-4 items-center p-4 rounded-lg w-full max-w-60 justify-start",
                             {
                               "bg-blue-1": isActive,
                             }

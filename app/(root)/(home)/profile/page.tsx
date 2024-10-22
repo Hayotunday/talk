@@ -1,10 +1,10 @@
-"use client";
-
+import ProfileSection from "@/components/ProfileSection";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { useGetCallbyId } from "@/hooks/useGetCallById";
 import { useUser } from "@clerk/nextjs";
 import { useStreamVideoClient } from "@stream-io/video-react-sdk";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -25,7 +25,7 @@ const Table = ({
   </div>
 );
 
-const PersonalRoom = () => {
+const Profile = () => {
   // const { toast } = useToast();
   // const { user } = useUser();
   // const meetingId = user?.id;
@@ -54,7 +54,7 @@ const PersonalRoom = () => {
 
   // return (
   //   <section className="flex size-full flex-col gap-10 text-white">
-  //     <h1 className="text-3xl font-bold">Personal Room</h1>
+  //     <h1 className="text-3xl font-bold">Profile</h1>
 
   //     <div className="flex w-full flex-col gap-8 xl:max-w-[900px]">
   //       <Table title="Topic" description={`${user?.username}'s Meeting Room`} />
@@ -80,7 +80,11 @@ const PersonalRoom = () => {
   //   </section>
   // );
 
-  return <div>Personal Room</div>;
+  return (
+    <section className="flex size-full justify-center items-start">
+      <ProfileSection />
+    </section>
+  );
 };
 
-export default PersonalRoom;
+export default Profile;
