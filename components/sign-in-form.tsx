@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -28,6 +28,8 @@ const signInFormSchema = () => {
 const SignInForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const serachParams = useSearchParams();
+  const redirectTo = serachParams.get("redirectTo");
 
   const formSchema = signInFormSchema();
   const form = useForm<z.infer<typeof formSchema>>({
@@ -60,6 +62,9 @@ const SignInForm = () => {
       });
 
       toast.success("Signed in successfully.");
+      if (redirectTo) {
+        router.push(decodeURIComponent(redirectTo));
+      }
       router.push("/");
     } catch (error) {
       console.log(error);
@@ -67,6 +72,13 @@ const SignInForm = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const getLinkHref = () => {
+    if (redirectTo) {
+      return `/sign-up?redirectTo=${redirectTo}`;
+    }
+    return "/sign-up";
   };
 
   return (
@@ -108,7 +120,10 @@ const SignInForm = () => {
 
         <p className="text-center">
           No account yet?
-          <Link href="/sign-up" className="font-bold text-user-primary ml-1">
+          <Link
+            href={getLinkHref()}
+            className="font-bold text-user-primary ml-1"
+          >
             Sign Up
           </Link>
         </p>

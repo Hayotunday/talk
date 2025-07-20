@@ -30,6 +30,23 @@ export async function signUp(params: SignUpParams) {
   const { uid, name, email, photo_url } = params;
 
   try {
+    let photo = photo_url;
+    if (photo && photo !== "") {
+      const formData = new FormData();
+      formData.append("file", photo);
+      formData.append(
+        "upload_preset",
+        `${process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET}`
+      );
+      const res = await fetch(
+        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+        { method: "POST", body: formData }
+      );
+      const data = await res.json();
+      photo = data.secure_url;
+      console.log("Image uploaded to Cloudinary:", photo);
+    }
+
     // check if user exists in db
     const userRecord = await db.collection("users").doc(uid).get();
     if (userRecord.exists)
@@ -42,7 +59,7 @@ export async function signUp(params: SignUpParams) {
     await db.collection("users").doc(uid).set({
       display_name: name,
       email,
-      photo_url,
+      photo_url: photo,
       createdAt: new Date(),
     });
 
@@ -116,8 +133,16 @@ export async function getCurrentUser(): Promise<User | null> {
       .get();
     if (!userRecord.exists) return null;
 
+    const userData = userRecord.data();
+    if (!userData) return null;
+
+    // Firestore Timestamps are not serializable, so we convert them to a Date object.
+    if (userData.createdAt && typeof userData.createdAt.toDate === "function") {
+      userData.createdAt = userData.createdAt.toDate();
+    }
+
     return {
-      ...userRecord.data(),
+      ...userData,
       uid: userRecord.id,
     } as User;
   } catch (error) {

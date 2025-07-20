@@ -21,8 +21,8 @@ interface SignUpParams {
   uid: string;
   name: string;
   email: string;
-  photo_url?: string;
-  password: string;
+  photo_url: string;
+  password?: string;
 }
 
 interface SignInParams {

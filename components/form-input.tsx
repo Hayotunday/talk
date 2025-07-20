@@ -1,5 +1,8 @@
-import { Control, FieldValues, Path } from "react-hook-form";
+"use client";
 
+import { ChangeEvent } from "react";
+import Image from "next/image";
+import { Control, FieldValues, Path } from "react-hook-form";
 import {
   FormItem,
   FormLabel,
@@ -16,7 +19,11 @@ interface FormInputProps<T extends FieldValues> {
   label: string;
   description?: string;
   placeholder?: string;
-  type?: "text" | "email" | "password";
+  type?: "text" | "email" | "password" | "image";
+  handleChangeImage?: (
+    e: ChangeEvent<HTMLInputElement>,
+    fieldChange: (value: string) => void
+  ) => void;
 }
 
 const FormInput = <T extends FieldValues>({
@@ -26,6 +33,7 @@ const FormInput = <T extends FieldValues>({
   description,
   placeholder,
   type = "text",
+  handleChangeImage,
 }: FormInputProps<T>) => {
   return (
     <FormField
@@ -33,15 +41,51 @@ const FormInput = <T extends FieldValues>({
       name={name}
       render={({ field }) => (
         <FormItem className="w-full">
-          <FormLabel className="label">{label}</FormLabel>
-          <FormControl>
-            <Input
-              className="input"
-              type={type}
-              placeholder={placeholder}
-              {...field}
-            />
-          </FormControl>
+          {type === "image" ? (
+            <>
+              <FormLabel className="account-form_image-label">
+                {field.value ? (
+                  <Image
+                    src={field.value}
+                    alt="profile photo"
+                    width={96}
+                    height={96}
+                    priority
+                    className="rounded-full object-contain"
+                  />
+                ) : (
+                  <Image
+                    src={"/profile.svg"}
+                    alt="profile photo"
+                    width={24}
+                    height={24}
+                    className="object-contain"
+                  />
+                )}
+              </FormLabel>
+              <FormControl className="flex-1 text-base-semibold text-gray-200">
+                <Input
+                  type="file"
+                  accept="image/*"
+                  placeholder="upload profile photo"
+                  className="account-form_image-input"
+                  onChange={(e) => handleChangeImage?.(e, field.onChange)}
+                />
+              </FormControl>
+            </>
+          ) : (
+            <>
+              <FormLabel className="label">{label}</FormLabel>
+              <FormControl>
+                <Input
+                  className="input"
+                  type={type}
+                  placeholder={placeholder}
+                  {...field}
+                />
+              </FormControl>
+            </>
+          )}
           {description && (
             <FormDescription className="text-xs text-muted-foreground">
               *{description}
