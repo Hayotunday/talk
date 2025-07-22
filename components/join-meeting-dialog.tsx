@@ -28,17 +28,27 @@ export default function JoinMeetingDialog({
   const handleJoin = async () => {
     const user = await getCurrentUser();
     if (!user) {
-      const redirectUrl = "/?action=join";
+      const redirectUrl = "/";
       router.push(`/sign-in?redirectTo=${encodeURIComponent(redirectUrl)}`);
       return;
     }
 
-    if (callId) {
-      router.push(`/meeting/${callId}`);
+    const trimmedCallId = callId.trim();
+    if (trimmedCallId) {
+      // Extracts the last part of the path, which should be the meeting ID,
+      // and removes any query parameters.
+      const meetingId = trimmedCallId.split("/").pop()?.split("?")[0];
+
+      if (!meetingId) {
+        toast.error("Invalid meeting link or ID.");
+        return;
+      }
+
+      router.push(`/meeting/${meetingId}`);
       setOpen(false);
       toast.success("Joining meeting...");
     } else {
-      toast.error("Please enter a valid meeting ID.");
+      toast.error("Please enter a meeting ID or link.");
     }
   };
 
@@ -51,7 +61,7 @@ export default function JoinMeetingDialog({
         <div className="space-y-4">
           <Input
             id="join-meeting-dialog"
-            placeholder="Enter Meeting ID"
+            placeholder="Enter Meeting ID or Meeting link"
             value={callId}
             onChange={(e) => setCallId(e.target.value)}
           />

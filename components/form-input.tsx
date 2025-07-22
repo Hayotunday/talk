@@ -12,6 +12,8 @@ import {
   FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Trash2Icon, UploadIcon } from "lucide-react";
 
 interface FormInputProps<T extends FieldValues> {
   control: Control<T>;
@@ -43,32 +45,44 @@ const FormInput = <T extends FieldValues>({
         <FormItem className="w-full">
           {type === "image" ? (
             <>
-              <FormLabel className="account-form_image-label">
-                {field.value ? (
-                  <Image
-                    src={field.value}
-                    alt="profile photo"
-                    width={96}
-                    height={96}
-                    priority
-                    className="rounded-full object-contain"
-                  />
-                ) : (
-                  <Image
-                    src={"/profile.svg"}
-                    alt="profile photo"
-                    width={24}
-                    height={24}
-                    className="object-contain"
-                  />
-                )}
+              <FormLabel className="flex flex-col items-start gap-2">
+                <FormLabel className="label">{label}</FormLabel>
+                <div className="flex flex-row items-center gap-2 justify-start w-full">
+                  <Button
+                    onClick={() =>
+                      document.getElementById("file-upload")?.click()
+                    }
+                    className="w-30 h-30 rounded-full relative bg-white hover:bg-white shadow-sm flex items-center justify-center cursor-pointer"
+                  >
+                    {field.value ? (
+                      <Image
+                        src={field.value}
+                        alt="profile photo"
+                        width={96}
+                        height={96}
+                        priority
+                        className="rounded-full object-contain"
+                      />
+                    ) : (
+                      <Image
+                        src={"/profile.svg"}
+                        alt="profile photo"
+                        width={24}
+                        height={24}
+                        className="rounded-full object-contain"
+                      />
+                    )}
+                    <UploadIcon className="w-10 h-10 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-gray-500" />
+                  </Button>
+                </div>
               </FormLabel>
-              <FormControl className="flex-1 text-base-semibold text-gray-200">
+              <FormControl className="flex-1 text-base font-semibold text-gray-200">
                 <Input
+                  id="file-upload"
                   type="file"
                   accept="image/*"
                   placeholder="upload profile photo"
-                  className="account-form_image-input"
+                  className="hidden"
                   onChange={(e) => handleChangeImage?.(e, field.onChange)}
                 />
               </FormControl>

@@ -41,6 +41,7 @@ const SignInForm = () => {
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    setIsLoading(true);
     try {
       const { email, password } = data;
 
@@ -82,19 +83,19 @@ const SignInForm = () => {
   };
 
   return (
-    <div className="card-border lg:min-w-[566px]">
-      <div className="flex flex-col gap-6 card py-14 px-10">
-        <div className="flex flex-row gap-2 justify-center">
+    <div className="w-full flex items-center justify-center min-h-screen bg-gray-50">
+      <div className="flex flex-col items-center gap-6 py-3 px-10 lg:min-w-[566px] border border-gray-200 rounded-lg shadow-sm">
+        <div className="flex flex-row gap-2 justify-center items-center">
           <Image src="/logo.svg" alt="logo" height={32} width={38} />
-          <h2 className="text-primary-100">Talk</h2>
+          <h2 className="font-bold ">Talk</h2>
         </div>
 
-        <h3>Sign in and continue where you left off</h3>
+        <h3 className="font-medium">Sign in and continue where you left off</h3>
 
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="w-full space-y-6 mt-4 form"
+            className="w-full space-y-6 flex flex-col items-center"
           >
             <FormInput
               control={form.control}
@@ -120,10 +121,7 @@ const SignInForm = () => {
 
         <p className="text-center">
           No account yet?
-          <Link
-            href={getLinkHref()}
-            className="font-bold text-user-primary ml-1"
-          >
+          <Link href={getLinkHref()} className="font-bold hover:underline ml-1">
             Sign Up
           </Link>
         </p>

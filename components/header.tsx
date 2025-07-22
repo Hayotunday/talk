@@ -37,7 +37,7 @@ export default function Header({ user }: HeaderProps) {
     <header className="bg-white shadow-sm">
       <div className="container mx-auto p-4 flex justify-between items-center">
         <Link href="/" className="flex items-center gap-2">
-          <Image src="/logo.png" alt="Talk Logo" width={40} height={40} />
+          <Image src="/logo.svg" alt="Talk Logo" width={40} height={40} />
           <span className="text-xl font-bold">Talk</span>
         </Link>
 

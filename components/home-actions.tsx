@@ -65,7 +65,10 @@ export default function HomeActions({ isAuthenticated }: HomeActionsProps) {
       <Button onClick={handleMeetingHistory}>Meeting History</Button>
 
       <NewMeetingDialog open={isOpenNewMeeting} setOpen={setIsOpenNewMeeting} />
-      <JoinMeetingDialog open={isOpenLogin} setOpen={setIsOpenLogin} />
+      <JoinMeetingDialog
+        open={isOpenJoinMeeting}
+        setOpen={setIsOpenJoinMeeting}
+      />
       <LoginPromptDialog
         open={isOpenLogin}
         setOpen={setIsOpenLogin}
